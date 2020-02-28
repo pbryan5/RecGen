@@ -1,0 +1,96 @@
+## Station Analysis Template for Surface Water Records
+## Patrick Bryan, Hydrologic Technician, OTXWSC
+## Working Date: 2/12/2019
+## Version 1.0.0
+
+
+f= open("station_analysis.txt","w+")
+
+import tkinter
+from tkinter import simpledialog
+parent = tkinter.Tk()
+
+stid = simpledialog.askstring('Station ID', 'Define Station ID and Name', parent=parent)
+per = simpledialog.askstring('Period of Record', 'Define period of record: ', parent=parent)
+analyst = simpledialog.askstring('Name of Analyst', 'Enter name ("jsmith")', parent=parent)
+mingh = simpledialog.askstring('Gage Height Record', 'What was the minimum GH during period? (Numbers only) ', parent=parent)
+minghd = simpledialog.askstring('Gage Height Record', 'What was date of the minimum GH during period? (mm/dd/yyyy) ', parent=parent)
+maxgh = simpledialog.askstring('Gage Height Record', 'What was the maximum GH during period? (Number only) ', parent=parent)
+maxghd = simpledialog.askstring('Gage Height Record', 'What was date of the maximum GH during period? (mm/dd/yyyy) ', parent=parent)
+cmpl = simpledialog.askstring('Gage Height Record', 'Is the GH data complete or missing data? (Answer "complete", or "missing data due to...") ', parent=parent)
+nl = simpledialog.askstring('Gage Height Record', 'Answer the number of data gaps in period, (answer no for none.) ', parent=parent)
+ldate = simpledialog.askstring('Gage Height Record', 'Input date of last levels run, (mm/dd/yyyy) ', parent=parent)
+lfreq = simpledialog.askstring('Gage Height Record', 'Input levels frequency in years, (number only). ', parent=parent)
+reset = simpledialog.askstring('Gage Height Record', 'Was the dial reset during last levels run? (Answer "reset" or "not reset"). ', parent=parent)
+ddat = simpledialog.askstring('Gage Height Record', 'What did the dial read during most recent field visit? (Numbers only) ', parent=parent)
+edits = simpledialog.askstring('Gage Height Record', 'Were there any edits to the data? (If not answer "None"). ', parent=parent)
+inout = simpledialog.askstring('Gage Height Record', 'Did DCP GH report within or outside error threshold? (Answer "in" or "out"). ', parent=parent)
+mdate = simpledialog.askstring('Discharge Record', 'What was the date of the most recent measurement? (mm/dd/yyyy) ', parent=parent)
+rating = simpledialog.askstring('Discharge Record', 'What is the current rating number? ', parent=parent)
+
+mmtno = simpledialog.askstring('Discharge Record', 'What is the measurement number from the most recent field trip? ', parent=parent)  
+
+pzf = simpledialog.askstring('Discharge Record', 'What was the pzf during the visit? (Numbers only) ', parent=parent)
+
+qdifpct = simpledialog.askstring('Discharge Record', 'What was the percent difference between measured and currently shifted Q? (Numbers only) ', parent=parent)
+
+scourfill = simpledialog.askstring('Discharge Record', 'Was there a scour or fill observed between visits? (Answer "(slight/significant) scour" or "fill") ', parent=parent)
+
+conclear = simpledialog.askstring('Discharge Record', 'Was the control clear or not clear? (Answer "clear" or "not clear") ', parent=parent)
+concond = simpledialog.askstring('Discharge Record', 'Was the channel under section or channel control?, (Describe the conditions at the control during measurement.) ', parent=parent)
+m1d = simpledialog.askstring('Discharge Record', 'What was the previously measured discharge? (numbers only) ', parent=parent)
+m2d = simpledialog.askstring('Discharge Record', 'What was the most recent measured discharge? (Numbers only) ', parent=parent)
+inputlo = simpledialog.askstring('Rating', 'What is the low hinge point of the current rating? (Numbers only) ', parent=parent)
+inputmid = simpledialog.askstring('Rating', 'What is the mid hinge point of the current rating? (Numbers only) ', parent=parent)
+inputhi = simpledialog.askstring('Rating', 'What is the high hinge point of the current rating? (Numbers only) ', parent=parent)
+
+def shiftyesno(answer):
+    if answer == ('no' or 'No'):    
+        return ("No shifts were needed based on " + (mmtno))
+    elif answer == ('yes' or 'Yes'):
+        eventend = simpledialog.askstring('Rating', 'Did the previous shift end at the peak or recession of largest event? Answer peak or recession ', parent=parent)
+        eventbegin = simpledialog.askstring('Rating', 'Did the new shift begin at peak or on recession? Answer at peak or on recession ', parent=parent)
+        shiftdate = simpledialog.askstring('Rating', 'What date was the shift applied? Number only ', parent=parent)
+        return ("Ended previous shift at "+(eventend)+" on "+(shiftdate)+". Began new "+(scourfill)+" shift "+(eventbegin)+" of event and continued through MMT "+(mmtno)+" on "+(mdate)+" which rated "+(mqual)+".")
+    else:
+        return ("N/A")
+
+
+
+mqual = simpledialog.askstring('Discharge Record', 'What was the measurement quality: poor, fair, good, or excellent? ', parent=parent)
+estimates = simpledialog.askstring('Discharge Record', 'Estimates? (if yes, please describe; or answer None) ', parent=parent)
+hydrocomp = simpledialog.askstring('Discharge Record', 'What is the site number for hydrographic comparisons? ', parent=parent)
+hydrocompqual = simpledialog.askstring('Discharge Record', 'How does the site compare by hydrograph? Answer: compares reasonably well, or does not compare well due to... ', parent=parent)
+maxq = simpledialog.askstring('Discharge Record', 'What was the maximum computed discharge for period? Number only ', parent=parent)
+maxqdate = simpledialog.askstring('Discharge Record', 'On what date did this occur? mm/dd/yyyy ', parent=parent)
+minq = simpledialog.askstring('Discharge Record', 'What was the minimum computed discharge for period? Number only ', parent=parent)
+minqdate = simpledialog.askstring('Discharge Record', 'On what date did this occur? mm/dd/yyyy ', parent=parent)
+comments = simpledialog.askstring('Final Thoughts', 'Any comments to add? (CSG needed?, New rating needed?, etc... If not answer "None")', parent=parent)
+
+h1 = "\nStation Number and Name: " + (stid)
+h2 = "\nAnalysis Period: " + (per)
+h3 = "\nAnalyst: " + (analyst)
+b1 = "\nGage Height Record: Gage height record is rated fair due to minor painting. Range of computed stage was "+(mingh)+" ft. on "+(minghd)+" to "+(maxgh)+" ft. on "+(maxghd)+". Gage height record is "+(cmpl)+" with "+(nl)+" data gaps."
+b2 = "\n\tDatum: Full station levels were run "+(ldate)+". Levels frequency is "+(lfreq)+". WWT was "+(reset)+" during levels run.\n\tElevation of check bar by dial during visit on "+(ldate)+": "+(ddat)+" ft.\n\tElevation by levels: "+(ldate)+" ft."
+b3 = "\n\tBackup Data:  All data is backed up to shared network data folder."
+b4 = "\n\tIce Affected: N/A"
+b5 = "\n\tEdits: "+(edits)+"."
+b6 = "\n\tGage Height Corrections: DCP read "+(inout)+" +/-0.02 ft. threshold of WWT on the field visit on "+(mdate)+", no GH corrections needed."
+b7 = "\n\tPeak Stage: The maximum computed gage-height for the period was "+(maxgh)+" ft. on "+(maxghd)+". No high-water marks were noted during the period."
+b8 = "\n\tPZF – GZF computed to be "+(pzf)+" ft for visit on "+(mdate)+"."
+b9 = "\nStage-Discharge Relation: Rating No. "+(rating)+" was continued into use during the entire period. Measurements confirmed the rating at the low end of the rating during the current period. Measurement number "+(mmtno)+" indicated a slight scour shift on lower end."
+b10 = "\n\tDischarge Measurements and Control Conditions: Both measurements agreed within "+(qdifpct)+" of each other and indicated a "+(scourfill)+" effect in channel.\n\n\tThe control conditions were observed to be "+(conclear)+". "+(concond)+".\n\n\tMeasured discharges for the period ranged from "+(m1d)+" to "+(m2d)+" cfs."
+b11 = "\n\tShift Curves: The stage shifts use a low-end (section) shift point of "+(inputlo)+" ft., which is the low-point of Rating No. "+(rating)+" before extending up to a stage of "+(inputmid)+" ft. which is the stage at which the section control begins to become inundated during normal conditions.  From this knee point, the shift curves are brought back to the rating at a stage of "+(inputhi)+" ft., where channel control conditions are expected to be fully in control."
+b12 = "\n\tApplication of shift curves: " + shiftyesno(simpledialog.askstring('Dialog Title', 'Were shifts required? If no measurement answer "N/A"', parent=parent))
+b13 = "\nComputed Discharge: Record for period rated fair. Discharge record was computed using gage-height record from a pressure transducer, gage-height corrections, and Rating No. "+(rating)+" with variable shift applications. Discharge record for the period was complete with the following exceptions:"
+b14 = "\n\tEstimates: "+(estimates)+" for period."
+b15 = "\nHydrographic Comparison: Hydrographic comparison can be made with station "+(hydrocomp)+" to verify the timing and magnitude of rises throughout the period. Hydrographic comparison "+(hydrocompqual)
+b16 = "\n\tPeak Streamflow: Maximum computed discharge for the period was "+(maxq)+" cfs at a on "+(maxqdate)+". The minimum computed discharge for the period was "+(minq)+" cfs on "+(minqdate)+"."
+b17 = "\nExtremes for 2020 WY: \nMaximum computed discharge: 37.86 cfs on 10/30/2019\nMinimum computed discharge: 0.40 cfs on 10/12/2019\nMaximum computed gage height: 2.65 ft. on 10/30/2019\nMinimum computed gage height: 1.95 ft. on 10/12/2019"
+b18 = "\nComments: "+(comments)+"."
+
+stationanaly = h1+h2+h3+b1+b2+b3+b4+b5+b6+b7+b8+b9+b10+b11+b12+b13+b14+b15+b16+b17+b18
+print(stationanaly)
+
+f.write(stationanaly)
+f.close()
